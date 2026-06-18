@@ -1,7 +1,6 @@
 from flask import Flask, render_template, request
 from flask_mysqldb import MySQL
 import mysql.connector
-import MySQLdb
 
 app = Flask(__name__)
 
@@ -26,9 +25,9 @@ def login_to_db():
     conn.close()
 
     if user:
-        return "Login successful!"
+        return render_template('dashboard.html')
     else:
-        return "Invalid username or password."
+        return render_template('login.html', error="Invalid username or password.")
 
 def get_db_connection():
     return mysql.connector.connect(
