@@ -11,6 +11,9 @@
                 <h2>Login</h2> 
                 <input type="text" name="username" id="username" placeholder="Username" required>
                 <input type="password" name="password" id="password" placeholder="Password" required>
+                {% if error %}
+                    <p class="error">{{ error }}</p>
+                {% endif %}
                 <button type="submit">Login</button>
                 <p class="message" id="message"></p>
             </div>

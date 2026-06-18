@@ -27,7 +27,7 @@ def login_to_db():
     if user:
         return render_template('dashboard.html')
     else:
-        return render_template('login.html', error="Invalid username or password.")
+        return render_template('login.html', error="Invalid username or password")
 
 def get_db_connection():
     return mysql.connector.connect(
