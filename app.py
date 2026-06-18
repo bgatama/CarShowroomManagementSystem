@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request
 from flask_mysqldb import MySQL
+import mysql.connector
 import MySQLdb
 
 app = Flask(__name__)
@@ -14,8 +15,28 @@ def login_to_db():
     username = request.form['username']
     password = request.form['password']
 
-    if username and password:
-        ... # Code to connect to the database and verify credentials
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT * FROM users WHERE username = %s AND user_password = %s",
+                   (username, password))
+
+    user = cursor.fetchone()
+    cursor.close()
+    conn.close()
+
+    if user:
+        return "Login successful!"
+    else:
+        return "Invalid username or password."
+
+def get_db_connection():
+    return mysql.connector.connect(
+        host='localhost',
+        user='root',
+        password='',
+        database='showroom_db'
+    )
 
 
     
