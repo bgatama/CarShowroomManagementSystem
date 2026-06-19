@@ -22,7 +22,7 @@ body {
 }
 
 .login-box input {
-    width: 100%;
+    width: 95%;
     padding: 10px;
     border-radius: 5px;
     border: 1px solid #ccc;
@@ -33,7 +33,7 @@ body {
 .login-box button {
     width: 100%;
     padding: 10px;
-    background: #007bff;
+    background: #9f9f9f;
     color: #ffffff;
     border: none;
     border-radius: 5px;
@@ -42,7 +42,7 @@ body {
 
 }
 .login-box button:hover {
-    background: #0056b3;
+    background: #555555;
 }
 
 .message {
@@ -59,4 +59,37 @@ body {
     padding: 10px;
     border-radius: 5px;
 
+}
+
+.sidebar{
+    margin: 0;
+    padding: 0;
+    width: 200px;
+    background-color: #555555;
+    position: fixed;
+    height: 100%;
+    overflow: auto;
+
+}
+
+.sidebar a{
+    display: block;
+    color: white;
+    padding: 12px;
+    text-decoration: none;
+}
+.sidebar a.active{
+    background-color: #0007c3;
+    color: white; 
+}
+
+.sidebar a:hover:not(.active) {
+    background-color: #555;
+    color: white
+}
+
+div.content{
+    margin-left: 200px;
+    padding: 1px 16px;
+    height: 1000px
 }
