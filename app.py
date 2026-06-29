@@ -29,6 +29,7 @@ def login_to_db():
     else:
         return render_template('login.html', error="Invalid username or password")
 
+
 def get_db_connection():
     return mysql.connector.connect(
         host='localhost',
@@ -37,6 +38,30 @@ def get_db_connection():
         database='showroom_db'
     )
 
+#Various routes for different pages
+@app.route('/dashboard')
+def dashboard():
+    return render_template("dashboard.html")
+
+@app.route('/customers')
+def customers():
+    return render_template("customers.html")
+
+@app.route('/login')
+def login():
+    return render_template("login.html")
+
+@app.route('/reports')
+def reports():
+    return render_template("reports.html")
+
+@app.route('/sales')
+def sales():
+    return render_template("sales.html")
+
+@app.route('/vehicles')
+def vehicles():
+    return render_template("vehicles.html")
 
     
 if __name__ == "__main__":
