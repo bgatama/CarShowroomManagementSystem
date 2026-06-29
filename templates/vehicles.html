@@ -18,5 +18,63 @@
             <h1>Vehicles</h1>
             <p>View details about your vehicles here.</p>
         </div>
+
+        <div class="content">
+            
+            <div class="vehicle-card">
+                    <div class="card-header">
+                        <h2>Add New Vehicle</h2>
+                    </div>
+
+                    <form>
+                        <div class="vehicle-form">
+                            <div class="form-group">
+                                <label>Vehicle Make</label>
+                                <input type="text" name="make" placeholder="Enter vehicle make">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Vehicle Model</label>
+                                <input type="text" name="model" placeholder="Enter vehicle model">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Vehicle Year</label>
+                                <input type="number" name="year" placeholder="Enter year">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Selling Price</label>
+                                <input type="number" name="price" placeholder="Enter selling price">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>VIN Number</label>
+                                <input type="text" name="vehicle_vin_number" placeholder="Enter VIN price">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Purchase Date</label>
+                                <input type="date" name="purchase_date">
+                            </div> 
+
+                            <div class="form-group">
+                                <label>Vehicle Status</label>
+                                <select name="vehicle_status">
+                                    <option value="">Select Status</option>
+                                    <option>Available</option>
+                                    <option>Sold</option>
+                                    <option>Awaiting Delivery</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="button-area">
+                            <button type="submit">Save Vehicle</button>
+                        </div>
+                    </form>
+            </div>
+            
+        </div>
     </body>
 </html>
