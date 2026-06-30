@@ -61,7 +61,19 @@ def sales():
 
 @app.route('/vehicles')
 def vehicles():
-    return render_template("vehicles.html")
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT * from `vehicle`" )
+
+    vehicles = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+
+    return render_template("vehicles.html",
+                           vehicles=vehicles
+                           )
 
 
 

@@ -84,6 +84,35 @@
                 <div class="view-card-header">
                     <h2>All Cars</h2>
                 </div>
+
+                <div class="vehicle-table">
+                    <table id="vehicle-table">
+                        <tr>
+                            <th>Vehicle ID</th>
+                            <th>Make</th>
+                            <th>Model</th>
+                            <th>Year</th>
+                            <th>VIN Number</th>
+                            <th>Price</th>
+                            <th>Status</th>
+                            <th>Purchase Date</th>
+                        </tr>
+
+                        {% for u in vehicles %}
+                        <tr>
+                            <td>{{ u[0] }}</td>
+                            <td>{{ u[1] }}</td>
+                            <td>{{ u[2] }}</td>
+                            <td>{{ u[3] }}</td>
+                            <td>{{ u[4] }}</td>
+                            <td>{{ u[5] }}</td>
+                            <td>{{ u[6] }}</td>
+                            <td>{{ u[7] }}</td>
+                        </tr>
+                        {% endfor %}
+                        
+                    </table>
+                </div>
             </div>
             
             
