@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 from flask_mysqldb import MySQL
 import mysql.connector
 
@@ -62,6 +62,30 @@ def sales():
 @app.route('/vehicles')
 def vehicles():
     return render_template("vehicles.html")
+
+
+
+@app.route('/add_vehicle', methods=['POST'])
+def add_vehicle():
+    make = request.form['make']
+    model = request.form['model']
+    year = request.form['year']
+    price = request.form['price']
+    vin_number = request.form['vin_number']
+    purchase_date = request.form['purchase_date']
+    vehicle_status = request.form['vehicle_status']
+
+
+    print(make)
+    print(model)
+    print(year)
+
+    return redirect(url_for('vehicles'))
+
+
+
+
+
 
     
 if __name__ == "__main__":

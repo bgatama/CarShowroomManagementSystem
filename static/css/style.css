@@ -97,3 +97,62 @@ div.content{
     padding: 1px 16px;
     height: 1000px
 }
+
+
+/* Vehicle Form Card */
+.vehicle-card{
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    overflow: auto;
+    margin-top: 20px
+
+}
+
+.vehicle-form{
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    gap: 20px;
+    padding: 20px;
+
+}
+
+.form-group{
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label{
+    font-weight: 500;
+    margin-bottom: 5px
+
+}
+
+.form-group input, .form-group select{
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 15px;
+    transition: 0.3s
+}
+
+.button-area{
+    padding: 0 25px 25px;
+    text-align: right;
+
+}
+
+.button-area button{
+    background: #28a745;
+    color: white;
+    border: none;
+    padding: 12px 28px;
+    font-size:15px;
+    border-radius: 5px;
+    cursor: pointer
+}
+
+.button-area button:hover{
+    background:#218838;
+
+}
+
