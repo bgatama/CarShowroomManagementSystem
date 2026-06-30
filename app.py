@@ -71,22 +71,37 @@ def add_vehicle():
     model = request.form['model']
     year = request.form['year']
     price = request.form['price']
-    vin_number = request.form['vin_number']
+    vehicle_vin_number = request.form['vehicle_vin_number']
     purchase_date = request.form['purchase_date']
     vehicle_status = request.form['vehicle_status']
 
+    conn = get_db_connection()
+    cursor = conn.cursor()
 
-    print(make)
-    print(model)
-    print(year)
+
+    cursor.execute("""
+INSERT INTO vehicle (make, model, year, vehicle_vin_number, price, vehicle_status, purchase_date)
+                  values (%s,%s,%s,%s,%s,%s,%s)
+                  """,
+                (
+                    make,
+                    model,
+                    year,
+                    vehicle_vin_number,
+                    price,
+                    vehicle_status,
+                    purchase_date
+                )
+                  )
+    
+    conn.commit()
+    
+    cursor.close()
+    conn.close()
 
     return redirect(url_for('vehicles'))
 
 
-
-
-
-
-    
+ 
 if __name__ == "__main__":
     app.run()

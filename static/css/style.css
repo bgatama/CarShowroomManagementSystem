@@ -156,3 +156,10 @@ div.content{
 
 }
 
+.view-vehicle-card{
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    overflow: auto;
+    margin-top: 20px;
+}
