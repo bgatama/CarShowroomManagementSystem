@@ -93,8 +93,8 @@ body {
 }
 
 div.content{
-    margin-left: 200px;
-    padding: 1px 16px;
+    margin-left: 300px;
+    padding: 20px;
     height: 1000px
 }
 
@@ -162,4 +162,139 @@ div.content{
     border-radius: 8px;
     overflow: auto;
     margin-top: 20px;
+}
+
+
+
+/*Side Bar*/
+
+nav{
+    position: fixed;
+    width: 300px;
+    height: 100%;
+    background: white;
+    left: -300px;
+    top: 0;
+    padding: 20px 0;
+    box-shadow: 0 25px 50px -12px rgba(0,0,0, .25);
+    z-index: 1000;
+    transition: 0.3s;
+
+}
+
+.nav-brand{
+    color: #5C4DB1;
+    margin-bottom: 30px;
+    padding: 0 20px;
+    display: block;
+    transition: 0.4s;
+    opacity: 0;
+    margin-left: -50px;
+
+}
+
+nav h2{
+    background: #fafafa;
+    text-transform: uppercase;
+    font-size: 12px;
+    padding: 12px 20px;
+    opacity: 0;
+    margin-left: -50px;
+    transition: 0.4s;
+
+}
+
+nav ul{
+    padding-top: 10px;
+    margin-bottom: 30px;
+}
+
+nav ul li {
+    opacity: 0;
+    margin-left: -50px;
+    transition: 0.4s;
+}
+
+nav ul li a {
+    font-size: 13px;
+    padding: 10px 20px;
+    display: block;
+    transition: 0.3s;
+}
+
+nav ul li i{
+    color: #5C4DB1;
+    width: 22px;
+
+}
+
+nav ul li a:hover {
+    color: #5C4DB1;
+    transform: translate(8px, 0)
+}
+
+nav ul li i.fa-facebook-f{
+    color: #3B5998;
+}
+
+nav ul li i.fa-twitter{
+    color: #00ACEE;
+}
+
+nav ul li i.fa-instagram{
+    color: #DD2A7B;
+}
+
+nav ul{
+    list-style:none;
+    padding:0;
+    margin:0;
+}
+
+nav a{
+    text-decoration:none;
+}
+
+.btn-show-nav{
+    position: absolute;
+    left: 15px;
+    top: 15px;
+    border: 1px solid #5C4DB1;
+    width: 34px;
+    height: 34px;
+    line-height: 34px;
+    border-radius: 50%;
+    color: #5C4DB1;
+    text-align: center;
+    cursor: pointer;
+
+}
+
+.btn-hide-nav {
+    position:absolute;
+    right: 8px;
+    top: 15px;
+    width: 34px;
+    height: 34px;
+    text-align: center;
+    cursor: pointer;
+}
+
+#close{
+    display: none;
+}
+
+input:checked ~ nav {
+    left: 0; 
+} 
+
+
+input:checked ~ nav ul li,
+input:checked ~ nav .nav-brand,
+input:checked ~ nav h2 {
+    opacity: 1;
+    margin-left: 0;
+    transition-delay: 0.4s;
+
+
 }
