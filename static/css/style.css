@@ -236,6 +236,20 @@ div.content{
     color:#dc3545;
 }
 
+.view-card-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+}
+
+.search-box{
+    padding:10px 15px;
+    width:250px;
+    border:1px solid #ddd;
+    border-radius:6px;
+}
+
 /*Side Bar*/
 
 nav{
