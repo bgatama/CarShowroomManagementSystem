@@ -102,6 +102,7 @@
                 <div class="vehicle-table">
                     <table id="vehicle-table">
                         <tr>
+                            <th>Actions</th>
                             <th>Vehicle ID</th>
                             <th>Make</th>
                             <th>Model</th>
@@ -114,13 +115,25 @@
 
                         {% for u in vehicles %}
                         <tr>
+                            <td>
+                                <a href="/edit/{{u[0]}}" class="edit-btn">
+                                <i class="fa-solid fa-pen"></i>
+                                </a>
+                                <a href="/delete/{{u[0]}}" class="delete-btn">
+                                <i class="fa-solid fa-trash"></i>
+                                </a>    
+                            </td>
                             <td>{{ u[0] }}</td>
                             <td>{{ u[1] }}</td>
                             <td>{{ u[2] }}</td>
                             <td>{{ u[3] }}</td>
                             <td>{{ u[4] }}</td>
-                            <td>{{ u[5] }}</td>
-                            <td>{{ u[6] }}</td>
+                            <td>Ksh{{"{:,.2f}".format(u[5]) }}</td>
+                            <td>
+                                <span class="status {{ u[6]|replace('', '-') }}">
+                                    {{ u[6] }}
+                                </span>
+                            </td>
                             <td>{{ u[7] }}</td>
                         </tr>
                         {% endfor %}
