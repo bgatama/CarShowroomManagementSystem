@@ -382,3 +382,132 @@ input:checked ~ nav h2 {
 
 
 }
+
+/* Quick Actions Section */
+.quick-actions{
+    background: #ffff;
+    border-radius: 8px;
+    padding: 25px;
+    margin-top:25px;
+    box-shadow: 0 2px 12px rgba(0,0,0,.08) ;
+}
+
+.quick-actions h2{
+    display: flex;
+    align-items: center;
+    gap:10px;
+    font-size:22px;
+    margin-bottom:25px;
+}
+
+.quick-actions h2 i{
+    color: #111827;
+}
+
+.actions{
+    display: flex;
+    gap:20px;
+    flex-wrap:wrap;
+}
+
+.action-card{
+    flex: 1;
+    min-width: 280px;
+
+    display: flex;
+    align-items: center;
+
+    padding: 20px;
+
+    border-radius:12px;
+
+    text-decoration: none;
+    transition: .3s;
+    border:1px solid transparent;
+}
+
+.action-card:hover{
+    transform:translateY(-3px);
+    box-shadow: 0 6px 18px rgba(0,0,0,.08); 
+}
+
+.icon{
+    width:60px;
+    height:60px;
+
+    border-radius:10px;
+
+    display:flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 28px;
+
+    margin-right:20px;
+}
+
+.text{
+    flex:1;
+}
+
+.text h3{
+    margin:0;
+    font-size: 24px;
+}
+
+.text p{
+    margin-top:5px;
+    color:#666;
+}
+
+.arrow{
+    font-size:18px;
+    opacity:.5;
+}
+
+.action-card:hover .arrow{
+    opacity:1;
+    transform:translateX(5px);
+}
+
+.blue{
+    background:#f5f9ff;
+    border-color: #d6e6ff;
+}
+
+.blue .con{
+    background: #dce9ff;
+    color:#2563eb;
+}
+
+.blue h3{
+    color:#2563eb;
+}
+
+.green{
+    background:#f3fff7;
+    border-color:#d8f5e3;
+}
+
+.green .icon{
+    background:#dcfce7;
+    color:#16a34a;
+}
+
+.green h3{
+    color:#16a34a;
+}
+
+.purple{
+    background:#faf5ff;
+    border-color:#edd9ff;
+}
+
+.purple .icon{
+    background:#efe2ff;
+    color:#7c3aed;
+}
+
+.purple h3{
+    color:#7c3aed;
+}
