@@ -114,6 +114,33 @@ INSERT INTO vehicle (make, model, year, vehicle_vin_number, price, vehicle_statu
     return redirect(url_for('vehicles'))
 
 
+#Function for calculating the total vehicles, sales, customers and getting the revenue
+def calculate_totals():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT COUNT(*) FROM vehicles")
+    total_vehicles = cursor.fetchone()[0]
+
+    cursor.execute("SELECT COUNT(*) FROM customers")
+    total_customers = cursor.fetchone()[0]
+
+    cursor.execute("SELECT COUNT (*) FROM sales")
+    total_sales = cursor.fetchone()[0]
+
+    cursor.execute("SELECT SUM(price) FROM sales")
+    total_revenue = cursor.fetchone()[0] or 0
+
+    return render_template(
+        "dashboard.html",
+        total_vehicles=total_vehicles,
+        total_customers=total_customers,
+        total_sales=total_sales,
+        total_revenue=total_revenue
+    )
+
+
+
  
 if __name__ == "__main__":
     app.run()
