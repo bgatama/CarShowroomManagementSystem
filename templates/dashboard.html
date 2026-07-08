@@ -32,20 +32,70 @@
             <h1>Dashboard</h1>
             <p>Welcome back, admin! This is what is happening with your Car Showroom</p>
 
-            <div class="stat-card orange">
-                <div class="stat-icon">
-                    <i class="fa-solid fa-chart-line"></i>
-                </div>
+            <div class="dashboard-stats">
+                <div class="stat-card blue">
+                    <div class="stat-icon">
+                        <i class="fa-solid fa-car"></i>
+                    </div>
 
-                <div class="stat-content">
-                    <h4>TOTAL REVENUE</h4>
-                    <h2>KSh {{"{:,.0f}".format(total_revenue) }}</h2>
+                    <div class="stat-content">
+                        <h4>TOTAL VEHICLES</h4>
+                        <h2>{{ total_vehicles }}</h2>
+
+
+                    <a href="{{ url_for('vehicles') }}">
+                        View all vehicles
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </a>
+                    </div>
+                </div>
+                <div class="stat-card green">
+                    <div class="stat-icon">
+                        <i class="fa-solid fa-users"></i>
+                    </div>
+
+                    <div class="stat-content">
+                        <h4>TOTAL CUSTOMERS</h4>
+                        <h2>{{ total_customers }}</h2>
+
+
+                    <a href="{{ url_for('customers') }}">
+                        View all customers
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </a>
+                    </div>
+                </div>
+                <div class="stat-card purple">
+                    <div class="stat-icon">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                    </div>
+
+                    <div class="stat-content">
+                        <h4>TOTAL SALES</h4>
+                        <h2>{{ total_sales }}</h2>
+
+
+                    <a href="{{ url_for('sales') }}">
+                        View all sales
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </a>
+                    </div>
+                </div>
+                <div class="stat-card orange">
+                    <div class="stat-icon">
+                        <i class="fa-solid fa-chart-line"></i>
+                    </div>
+
+                    <div class="stat-content">
+                        <h4>TOTAL REVENUE</h4>
+                        <h2>KSh {{ "{:,.0f}".format(total_revenue) }}</h2>
+
 
                     <a href="{{ url_for('reports') }}">
                         View reports
                         <i class="fa-solid fa-chevron-right"></i>
                     </a>
-
+                    </div>
                 </div>
             </div>
 
