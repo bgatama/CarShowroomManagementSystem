@@ -25,7 +25,7 @@ def login_to_db():
     conn.close()
 
     if user:
-        return render_template('dashboard.html')
+        return calculate_totals()
     else:
         return render_template('login.html', error="Invalid username or password")
 
@@ -107,6 +107,7 @@ INSERT INTO vehicle (make, model, year, vehicle_vin_number, price, vehicle_statu
                   )
     
     conn.commit()
+
     
     cursor.close()
     conn.close()
@@ -119,17 +120,20 @@ def calculate_totals():
     conn = get_db_connection()
     cursor = conn.cursor()
 
-    cursor.execute("SELECT COUNT(*) FROM vehicles")
+    cursor.execute("SELECT COUNT(*) FROM vehicle")
     total_vehicles = cursor.fetchone()[0]
 
     cursor.execute("SELECT COUNT(*) FROM customers")
     total_customers = cursor.fetchone()[0]
 
-    cursor.execute("SELECT COUNT (*) FROM sales")
+    cursor.execute("SELECT COUNT(*) FROM sales")
     total_sales = cursor.fetchone()[0]
 
-    cursor.execute("SELECT SUM(price) FROM sales")
+    cursor.execute("SELECT SUM(amount) FROM sales")
     total_revenue = cursor.fetchone()[0] or 0
+
+    cursor.close()
+    conn.close()
 
     return render_template(
         "dashboard.html",

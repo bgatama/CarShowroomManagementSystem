@@ -32,6 +32,23 @@
             <h1>Dashboard</h1>
             <p>Welcome back, admin! This is what is happening with your Car Showroom</p>
 
+            <div class="stat-card orange">
+                <div class="stat-icon">
+                    <i class="fa-solid fa-chart-line"></i>
+                </div>
+
+                <div class="stat-content">
+                    <h4>TOTAL REVENUE</h4>
+                    <h2>KSh {{"{:,.0f}".format(total_revenue) }}</h2>
+
+                    <a href="{{ url_for('reports') }}">
+                        View reports
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </a>
+
+                </div>
+            </div>
+
             <div class="quick-actions">
                 <h2>
                 <i class="fa-solid fa-bolt"></i>
