@@ -41,7 +41,7 @@ def get_db_connection():
 #Various routes for different pages
 @app.route('/dashboard')
 def dashboard():
-    return render_template("dashboard.html")
+    return calculate_totals()
 
 @app.route('/customers')
 def customers():
