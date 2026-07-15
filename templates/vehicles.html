@@ -32,7 +32,12 @@
     
             <div class="vehicle-card">
                     <div class="card-header">
-                        <h2>Add New Vehicle</h2>
+                        <h2>
+                        <span class="heading-icon">
+                            <i class="fa-solid fa-car"></i>
+                        </span>    
+                            Add New Vehicle
+                        </h2>
                     </div>
 
                     <form action="{{ url_for('add_vehicle')}}" method="POST">
@@ -92,8 +97,13 @@
             </div>
 
             <div class="view-vehicle-card">
-                <div class="view-card-header">
-                    <h2>All Cars</h2>
+                <div class="view-card-header"> 
+                    <h2>
+                        <span class="heading-icon">
+                            <i class="fa-solid fa-car"></i>
+                        </span>
+                        All Cars
+                    </h2>
                     <input
                     type="text"
                     placeholder="Search Vehicle..."

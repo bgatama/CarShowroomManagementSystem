@@ -107,9 +107,34 @@ div.content{
     background: #ffffff;
     padding: 20px;
     border-radius: 8px;
+    box-shadow:0 8px 24px rgba(0,0,0,.08);
     overflow: auto;
     margin-top: 20px
 
+}
+
+.card-header h2,
+.view-card-header h2{
+    display:flex;
+    align-items:center;
+    gap:15px;
+    font-size:32px;
+    font-weight:700;
+    margin:0;
+}
+
+.heading-icon{
+    width:46px;
+    height:46px;
+    border-radius: 50%;
+    background:#f4f1ff;
+    color:#5C4DB1;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    font-size:20px;
 }
 
 .vehicle-form{
@@ -135,7 +160,19 @@ div.content{
     padding: 10px;
     border-radius: 8px;
     font-size: 15px;
-    transition: 0.3s
+    transition: 0.25s;
+    border: 1px solid #ddd;
+}
+
+.form-group input:focus,
+.form-group select:focus{
+
+    outline:none;
+
+    border-color:#5C4DB1;
+
+    box-shadow:0 0 0 3px rgba(92,77,177,.12);
+
 }
 
 .button-area{
@@ -145,17 +182,20 @@ div.content{
 }
 
 .button-area button{
-    background: #28a745;
+    background: #5C4DB1;
     color: white;
     border: none;
-    padding: 12px 28px;
-    font-size:15px;
-    border-radius: 5px;
-    cursor: pointer
+    padding: 14px 28px;
+    font-size:16px;
+    border-radius: 10px;
+    font-weight: 600;
+    transition: .3s;
 }
 
 .button-area button:hover{
-    background:#218838;
+    background:#4a3d92;
+    transform: translateY(-2px);
+    box-shadow:0 8px 18px rgba(92,77,177,.3);
 
 }
 
@@ -164,7 +204,7 @@ div.content{
     background: #ffffff;
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0,0,0,.08);
+    box-shadow:0 8px 24px rgba(0,0,0,.08);
     margin-top: 20px;
     overflow: auto;
     margin-top: 20px;
@@ -182,9 +222,12 @@ div.content{
 }
 
 #vehicle-table th{
-    background: #f5f5f5;
-    color: #555;
-    font-weight: 600;
+    background: #fafafa;
+    color: #6b7280;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing:.5px;
+    font-size:13px;
     padding: 10px;
     text-align: left;
     border-bottom: 2px solid #ddd;
@@ -210,9 +253,10 @@ div.content{
 }
 
 .status{
+    padding:8px 14px;
     border-radius:20px;
     font-size:13px;
-    font-weight:600;
+    font-weight:700;
 }
 
 .in-stock{
@@ -230,13 +274,25 @@ div.content{
     color:#856404;
 }
 
+.edit-btn,
+.delete-btn{
+    width:34px;
+    height:34px;
+    display:inline-flex;
+    justify-content:center;
+    align-items:center;
+    border-radius:8px;
+    text-decoration:none;
+}
+
 .edit-btn{
-    color:#0d6efd;
-    margin-right:10px;
+    background: #eef4ff;
+    color:#2563eb;
 }
 
 .delete-btn{
-    color:#dc3545;
+    background: #fff1f2;
+    color:#dc2626;
 }
 
 .view-card-header{
@@ -247,11 +303,24 @@ div.content{
 }
 
 .search-box{
-    padding:10px 15px;
-    width:250px;
-    border:1px solid #ddd;
-    border-radius:6px;
+
+    padding:12px 16px;
+    width:300px;
+    border:1px solid #e3e3e3;
+    border-radius:10px;
+    font-size:15px;
+    transition:.3s;
 }
+
+.search-box:focus{
+
+    outline:none;
+
+    border-color:#5C4DB1;
+
+    box-shadow:0 0 0 3px rgba(92,77,177,.12);
+}
+
 
 /*Side Bar*/
 
@@ -597,4 +666,75 @@ input:checked ~ nav h2 {
 
 .orange h2{
     color:#f39c12;
+}
+
+/*Customer Form Card */
+.customer-card{
+    background: #ffffff;
+    padding: 20px;
+    border-radius:8px;
+    margin-top:20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.08);
+}
+
+.customer-form{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:20px;
+    padding:20px;
+}
+
+/* Customer Table Card */
+.view-customer-card{
+    background: #ffffff;
+    padding:20px;
+    border-radius:8px;
+    margin-top:20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.08);
+    overflow: auto;
+
+}
+
+#customer-table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:15px;
+}
+#customer-table th{
+    background: #f5f5f5;
+    color: #555;
+    font-weight:600;
+    padding:12px;
+    text-align:left;
+    border-bottom:2px solid #ddd;
+}
+
+#customer-table td{
+    padding:15px;
+    border-bottom: 1px solid #eee;
+    color: #444;
+}
+
+#customer-table tbody tr:hover{
+    background:#f8f9fc;
+    transition:.3s;
+}
+
+#customer-table th:first-child{
+    border-top-left-radius:8px;
+}
+
+#customer-table th:last-child{
+    border-top-right-radius:8px;
+}
+
+/* CUstomer Type Badge */
+.customer-type{
+    display:inline-block;
+    padding:6px 14px;
+    border-radius:20px;
+    font-size:13px;
+    font-weight:600;
+    background:#e8f0fe;
+    color:#2563eb;
 }

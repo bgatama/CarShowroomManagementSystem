@@ -43,10 +43,6 @@ def get_db_connection():
 def dashboard():
     return calculate_totals()
 
-@app.route('/customers')
-def customers():
-    return render_template("customers.html")
-
 @app.route('/login')
 def login():
     return render_template("login.html")
@@ -74,8 +70,6 @@ def vehicles():
     return render_template("vehicles.html",
                            vehicles=vehicles
                            )
-
-
 
 @app.route('/add_vehicle', methods=['POST'])
 def add_vehicle():
@@ -114,6 +108,54 @@ INSERT INTO vehicle (make, model, year, vehicle_vin_number, price, vehicle_statu
 
     return redirect(url_for('vehicles'))
 
+@app.route('/customers')
+def customers():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT * from customers")
+
+    customers = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+
+    return render_template("customers.html",
+                           customers=customers)
+
+@app.route('/add_customer', methods=['POST'])
+def add_customer():
+    national_id = request.form['national_id']
+    first_name = request.form['first_name']
+    last_name = request.form['last_name']
+    phone_number = request.form['phone']
+    email = request.form['email']
+    gender = request.form['gender']
+    customer_type = request.form['customer_type']
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        INSERT INTO customers
+        (national_id, first_name, last_name, phone_number, email, gender, customer_type)
+        VALUES (%s,%s,%s,%s,%s,%s,%s)
+    """, (
+    national_id,
+    first_name,
+    last_name,
+    phone_number,
+    email,
+    gender,
+    customer_type
+    ))
+
+    conn.commit()
+    
+    cursor.close()
+    conn.close()
+
+    return redirect(url_for('customers'))
 
 #Function for calculating the total vehicles, sales, customers and getting the revenue
 def calculate_totals():
