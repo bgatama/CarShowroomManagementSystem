@@ -253,10 +253,25 @@ div.content{
 }
 
 .status{
-    padding:8px 14px;
+    display:inline-block;
+    padding:7px 16px;
     border-radius:20px;
     font-size:13px;
     font-weight:700;
+    text-align: center;
+}
+
+.status.available{
+    background:#dcfce7;
+    color:#15803d;
+}
+.status.sold{
+    background:#fee2e2;
+    color:#dc2626;
+}
+.status.awaiting-delivery{
+    background:#fef3c7;
+    color:#d97706;
 }
 
 .in-stock{

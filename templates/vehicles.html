@@ -141,7 +141,7 @@
                             <td>{{ u[4] }}</td>
                             <td>Ksh{{"{:,.2f}".format(u[5]) }}</td>
                             <td>
-                                <span class="status {{ u[6]|replace('', '-') }}">
+                                <span class="status {{ u[6]|lower|replace(' ', '-') }}">
                                     {{ u[6] }}
                                 </span>
                             </td>
