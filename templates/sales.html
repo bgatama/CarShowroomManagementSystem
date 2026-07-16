@@ -28,6 +28,150 @@
         <div class="content">   
             <h1>Sales</h1>
             <p>View details about your sales here.</p>
+
+
+            <div class="sale-card">
+                <div class="card-header">
+                    <h2>
+                        <span class="heading-icon">
+                            <i class="fa-solid fa-cart-shopping"></i>
+                        </span>
+                        Record New Sale
+                    </h2>
+                </div>
+
+                <form action="{{ url_for('add_sale')}}" method="POST">
+
+                    <div class="sale-form">
+
+                        <div class="form-group">
+                            <label>Customer</label>
+                            <select name="customer_id" required>
+                                {% for customer in customers %}
+                                <option value="{{ customer[0]}}">
+                                    {{ customer[2] }} {{ customer[3] }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Vehicle</label>
+                            <select name="vehicle_id" required>
+                                {% for vehicle in vehicles %}
+                                <option value="{{ vehicle[0] }}">
+                                    {{ vehicle[1] }} {{ vehicle[2] }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Sale Date</label>
+                            <input type="date" name="sale_date" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Amount</label>
+                            <input
+                                type="number"
+                                name="amount"
+                                placeholder="Enter amount"
+                                required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Payment Method</label>
+
+                            <select name="payment_method">
+
+                                <option>Cash</option>
+                                <option>Bank Transfer</option>
+                                <option>Cheque</option>
+                                <option>Financing</option>
+
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+
+                            <label>Sale Status</label>
+
+                            <select name="sale_status">
+
+                                <option>Completed</option>
+                                <option>Pending</option>
+                                <option>Cancelled</option>
+
+                            </select>
+
+                        </div>
+                    </div>
+
+                    <div class="button-area">
+                        <button type="submit">
+                            Save Sale
+                        </button>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="view-sale-card">
+                <div class="view-card-header">
+                    <h2>
+                        <span class="heading-icon">
+                            <i class="fa-solid fa-cart-shopping"></i>
+                        </span>
+                        All Sales
+                    </h2>
+
+                    <input
+                    type="text"
+                    class="search-box"
+                    placeholder="Search Sale...">
+                </div>
+
+                <table id="sales-table">
+                    <tr>
+                        <th>Actions</th>
+                        <th>Sale ID</th>
+                        <th>Customer</th>
+                        <th>Vehicle</th>
+                        <th>Amount</th>
+                        <th>Payment</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                    </tr>
+
+                    {% for sale in sales %}
+
+                    <tr>
+                        <td>
+                            <a href="/edit_sale/{{ sale[0] }}" class="edit-btn">
+                                <i class="fa-solid fa-pen"></i>
+                            </a>
+
+                            <a href="/delete_sale/{{ sale[0] }}" class="delete-btn">
+                                <i class="fa-solid fa-trash"></i>
+                            </a>
+                        </td>
+
+                        <td>{{ sale[0] }}</td>
+                        <td>{{ sale[1] }} {{ sale[2] }}</td>
+                        <td>{{ sale[3] }} {{ sale[4] }}</td>
+                        <td>KSh {{ "{:,.2f}".format(sale[5]) }}</td>
+                        <td>{{ sale[6] }}</td>
+
+                        <td>
+                            <span class="sale-status {{ sale[7]|lower }}">
+                                {{ sale[7] }}
+                            </span>
+                        </td>
+                        <td>{{ sale[8] }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
         </div>
     </body>
 </html>

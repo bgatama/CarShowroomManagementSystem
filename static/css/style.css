@@ -753,3 +753,58 @@ input:checked ~ nav h2 {
     background:#e8f0fe;
     color:#2563eb;
 }
+
+
+/* Sales Sections */
+.sale-card,
+.view-sale-card{
+    background:#fff;
+    padding:20px;
+    border-radius:12px;
+    box-shadow:0 2px 12px rgba(0,0,0,.08);
+    margin-top:20px;
+}
+
+.sale-form{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:20px;
+    padding:20px;
+}
+
+#sales-table{
+    width:100%;
+    border-collapse:collapse
+}
+#sales-table th{
+    background:#f8f8f8;
+    color:#555;
+    padding:12px;
+    text-align:left;
+}
+#sales-table td{
+    padding:15px;
+    border-bottom:1px solid #eee;
+}
+
+/* Sales table status colours */
+.sale-status{
+    display:inline-block;
+    padding:7px 16px;
+    border-radius:20px;
+    font-size:13px;
+    font-weight:600;
+}
+
+.sale-status.completed{
+    background:#dcfce7;
+    color:#15803d;
+}
+.sale-status.pending{
+    background:#fef3c7;
+    color:#d97706;
+}
+.sale-status.cancelled{
+    background:#fee2e2;
+    color:#dc2626;
+}

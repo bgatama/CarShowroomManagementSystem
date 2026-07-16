@@ -51,10 +51,6 @@ def login():
 def reports():
     return render_template("reports.html")
 
-@app.route('/sales')
-def sales():
-    return render_template("sales.html")
-
 @app.route('/vehicles')
 def vehicles():
     conn = get_db_connection()
@@ -156,6 +152,100 @@ def add_customer():
     conn.close()
 
     return redirect(url_for('customers'))
+
+
+@app.route('/sales')
+def sales():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    # Customers
+    cursor.execute("""
+        SELECT customer_id, first_name, last_name
+        FROM customers
+    """)
+    customers = cursor.fetchall()
+
+    # Available vehicles
+    cursor.execute("""
+        SELECT vehicle_id, make, model
+        FROM vehicle
+        WHERE vehicle_status='Available'
+    """)
+    vehicles = cursor.fetchall()
+
+    # Sales table
+    cursor.execute("""
+        SELECT
+            sales.sale_id,
+            customers.first_name,
+            customers.last_name,
+            vehicle.make,
+            vehicle.model,
+            sales.amount,
+            sales.payment_method,
+            sales.sale_status,
+            sales.sale_date
+        FROM sales
+        JOIN customers
+            ON sales.customer_id = customers.customer_id
+        JOIN vehicle
+            ON sales.vehicle_id = vehicle.vehicle_id
+        ORDER BY sales.sale_date DESC
+    """)
+
+    sales = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+
+    return render_template(
+        "sales.html",
+        customers=customers,
+        vehicles=vehicles,
+        sales=sales
+    )
+
+@app.route('/add_sale', methods=['POST'])
+def add_sale():
+    customer_id = request.form['customer_id']
+    vehicle_id = request.form['vehicle_id']
+    sale_date = request.form['sale_date']
+    amount = request.form['amount']
+    payment_method = request.form['payment_method']
+    sale_status = request.form['sale_status']
+
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        INSERT INTO sales
+        (customer_id, vehicle_id, sale_date, amount, payment_method, sale_status)
+        VALUES (%s,%s,%s,%s,%s,%s)
+    """,
+    (
+        customer_id,
+        vehicle_id,
+        sale_date,
+        amount,
+        payment_method,
+        sale_status
+    ))
+    conn.commit()
+
+    if sale_status == "Completed":
+        cursor.execute("""
+            UPDATE vehicle
+            SET vehicle_status='Sold'
+            WHERE vehicle_id=%s
+        """, (vehicle_id,))
+        conn.commit()
+    
+    cursor.close()
+    conn.close()
+
+    return redirect(url_for('sales'))
 
 #Function for calculating the total vehicles, sales, customers and getting the revenue
 def calculate_totals():
