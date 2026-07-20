@@ -264,6 +264,28 @@ def calculate_totals():
     cursor.execute("SELECT SUM(amount) FROM sales")
     total_revenue = cursor.fetchone()[0] or 0
 
+    cursor.execute("""
+    SELECT
+        sales.sale_id,
+        customers.first_name,
+        customers.last_name,
+        vehicle.make,
+        vehicle.model,
+        sales.amount,
+        sales.sale_date,
+        sales.payment_method,
+        sales.sale_status
+    FROM sales
+    JOIN customers
+        ON sales.customer_id = customers.customer_id
+    JOIN vehicle
+        ON sales.vehicle_id = vehicle.vehicle_id
+    ORDER BY sales.sale_date DESC
+    LIMIT 5
+    """)
+
+    recent_sales = cursor.fetchall()
+
     cursor.close()
     conn.close()
 
@@ -272,7 +294,8 @@ def calculate_totals():
         total_vehicles=total_vehicles,
         total_customers=total_customers,
         total_sales=total_sales,
-        total_revenue=total_revenue
+        total_revenue=total_revenue,
+        recent_sales=recent_sales
     )
 
 

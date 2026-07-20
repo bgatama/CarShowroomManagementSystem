@@ -96,6 +96,52 @@
                 </div>
             </div>
 
+            <div class="recent-sales-card">
+
+                <div class="view-card-header">
+                    <h2>
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+                        Recent Sales
+                    </h2>
+
+                    <a href="{{ url_for('sales') }}" class="view-all-btn">
+                        View All Sales
+                    </a>
+                </div>
+
+                <table id="recent-sales-table">
+
+                    <tr>
+                        <th>Sale ID</th>
+                        <th>Customer</th>
+                        <th>Vehicle</th>
+                        <th>Amount</th>
+                        <th>Date</th>
+                        <th>Payment</th>
+                        <th>Status</th>
+                    </tr>
+
+                    {% for sale in recent_sales %}
+
+                    <tr>
+
+                        <td>{{ sale[0] }}</td>
+                        <td>{{ sale [1] }} {{ sale[2] }}</td>
+                        <td>{{ sale[3] }} {{ sale[4] }}</td>
+                        <td>Ksh {{ "{:,.2f}".format(sale[5]) }}</td>
+                        <td>{{ sale[6] }}</td>
+                        <td>{{ sale[7] }}</td>
+                        <td>
+                            <span class="sale-status {{ sale[8]| lower}}">
+                                {{ sale[8] }}
+                            </span>
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+                </table>
+            </div>
+
             <div class="quick-actions">
                 <h2>
                 <i class="fa-solid fa-bolt"></i>

@@ -593,6 +593,70 @@ input:checked ~ nav h2 {
     color:#7c3aed;
 }
 
+/* Displaying Recent Sales Section */
+.recent-sales-card{
+    background:#fff;
+    margin-top:30px;
+    padding:20px;
+    border-radius:12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,.08);
+}
+
+#recent-sales-table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+#recent-sales-table th{
+    background:#f7f7f7;
+    padding:12px;
+    text-align:left;
+    border-bottom:2px solid #ddd;
+}
+
+#recent-sales-table td{
+    padding:12px;
+    border-bottom: 1px solid #eee;
+}
+
+#recent-sales-table tr:hover{
+    background:#fafafa;
+}
+
+.view-all-btn{
+    text-decoration:none;
+    padding:10px 18px;
+    background:#f5f5f5;
+    color:#333;
+    border-radius:6px;
+}
+
+.view-all-btn:hover{
+    background:#e8e8e8;
+}
+
+.sale-status{
+    padding:6px 14px;
+    border-radius:20px;
+    font-size:13px;
+    font-weight:600;
+}
+
+.completed{
+    background:#d4edda;
+    color:#155724;
+}
+
+.pending{
+    background:#fff3cd;
+    color:#856404;
+}
+
+.cancelled{
+    background:#f8d7da;
+    color:#721c24;
+}
+
 /* Displaying totals */
 .dashboard-stats{
     display:grid;
