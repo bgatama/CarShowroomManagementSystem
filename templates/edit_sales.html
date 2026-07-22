@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Sale</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<div class="sale-card">
+
+    <div class="card-header">
+        <h2>Edit Sale</h2>
+    </div>
+
+    <form action="{{ url_for('update_sale', sale_id=sale[0]) }}" method="POST">
+
+        <div class="sale-form">
+
+
+            <div class="form-group">
+                <label>Customer</label>
+                <select name="customer_id">
+                    {% for c in customers %}
+                    <option value="{{ c[0] }}"
+                        {% if c[0] == sale[1] %}selected{% endif %}>
+                        {{ c[1] }} {{ c[2] }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Vehicle</label>
+                <select name="vehicle_id">
+                    {% for v in vehicles %}
+                    <option value="{{ v[0] }}"
+                        {% if v[0] == sale[2] %}selected{% endif %}>
+                        {{ v[1] }} {{ v[2] }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Sale Date</label>
+                <input
+                    type="date"
+                    name="sale_date"
+                    value="{{ sale[3] }}"
+                    required>
+            </div>
+
+            <div class="form-group">
+                <label>Amount</label>
+                <input
+                    type="number"
+                    name="amount"
+                    value="{{ sale[4] }}"
+                    required>
+            </div>
+
+            <div class="form-group">
+                <label>Payment Method</label>
+                <select name="payment_method">
+
+                    <option value="Cash"
+                        {% if sale[5]=='Cash' %}selected{% endif %}>
+                        Cash
+                    </option>
+
+                    <option value="Bank Transfer"
+                        {% if sale[5]=='Bank Transfer' %}selected{% endif %}>
+                        Bank Transfer
+                    </option>
+
+                    <option value="Cheque"
+                        {% if sale[5]=='Cheque' %}selected{% endif %}>
+                        Cheque
+                    </option>
+
+                    <option value="Mobile Money"
+                        {% if sale[5]=='Mobile Money' %}selected{% endif %}>
+                        Mobile Money
+                    </option>
+
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Sale Status</label>
+                <select name="sale_status">
+
+                    <option value="Pending"
+                        {% if sale[6]=='Pending' %}selected{% endif %}>
+                        Pending
+                    </option>
+
+                    <option value="Completed"
+                        {% if sale[6]=='Completed' %}selected{% endif %}>
+                        Completed
+                    </option>
+
+                    <option value="Cancelled"
+                        {% if sale[6]=='Cancelled' %}selected{% endif %}>
+                        Cancelled
+                    </option>
+
+                </select>
+            </div>
+
+        </div>
+
+        <div class="button-area">
+            <button type="submit">Update Sale</button>
+            <a href="{{ url_for('sales') }}">Cancel</a>
+        </div>
+
+    </form>
+
+</div>
+
+</body>
+</html>

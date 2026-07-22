@@ -141,6 +141,68 @@ def delete_vehicle(vehicle_id):
 
     return redirect(url_for('vehicles'))
 
+@app.route('/edit_vehicle/<int:vehicle_id>')
+def edit_vehicle(vehicle_id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+                   SELECT *
+                   FROM vehicle
+                   WHERE vehicle_id=%s
+                   """,(vehicle_id,))
+    vehicle = cursor.fetchone()
+
+    cursor.close()
+    conn.close()
+
+    return render_template(
+        "edit_vehicle.html",
+        vehicle=vehicle
+    )
+
+@app.route('/update_vehicle/<int:vehicle_id>', methods=['POST'])
+def update_vehicle(vehicle_id):
+    make = request.form['make']
+    model = request.form['model']
+    year = request.form['year']
+    vehicle_vin_number = request.form['vehicle_vin_number']
+    price = request.form['price']
+    vehicle_status = request.form['vehicle_status']
+    purchase_date = request.form['purchase_date']
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        UPDATE vehicle
+        SET
+            make = %s,
+            model = %s,
+            year = %s,
+            vehicle_vin_number = %s,
+            price = %s,
+            vehicle_status = %s,
+            purchase_date = %s
+        WHERE vehicle_id = %s
+    """, (
+        make,
+        model,
+        year,
+        vehicle_vin_number,
+        price,
+        vehicle_status,
+        purchase_date,
+        vehicle_id
+    ))
+
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+
+    return redirect(url_for('vehicles'))    
+
 @app.route('/customers')
 def customers():
 
@@ -233,6 +295,69 @@ def delete_customer(customer_id):
     conn.close()
 
     return redirect(url_for('customers'))
+
+@app.route('/edit_customer/<int:customer_id>')
+def edit_customer(customer_id):
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+                   SELECT *
+                   FROM customers
+                   WHERE customer_id = %s
+                   """, (customer_id,))
+    customer = cursor.fetchone()
+
+    cursor.close()
+    conn.close()
+
+    return render_template(
+        "edit_customer.html",
+        customer=customer
+    )
+
+@app.route('/update_customer/<int:customer_id>', methods=['POST'])
+def update_customer(customer_id):
+    national_id = request.form['national_id']
+    first_name = request.form['first_name']
+    last_name = request.form['last_name']
+    phone_number = request.form['phone']
+    email = request.form['email']
+    gender = request.form['gender']
+    customer_type = request.form['customer_type']
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        UPDATE customers
+        SET
+            national_id=%s,
+            first_name=%s,
+            last_name=%s,
+            phone_number=%s,
+            email=%s,
+            gender=%s,
+            customer_type=%s
+        WHERE customer_id=%s
+    """, (
+        national_id,
+        first_name,
+        last_name,
+        phone_number,
+        email,
+        gender,
+        customer_type,
+        customer_id
+    ))
+
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+
+    return redirect(url_for('customers'))   
 
 @app.route('/sales')
 def sales():
@@ -383,6 +508,78 @@ def delete_sale(sale_id):
 
     return redirect(url_for('sales'))
 
+@app.route('/edit_sale/<int:sale_id>')
+def edit_sale(sale_id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+                   SELECT *
+                   FROM sales
+                   WHERE sale_id=%s
+                   """, (sale_id,))
+    sale =  cursor.fetchone()
+
+    cursor.execute("""
+                   SELECT customer_id, first_name, last_name
+                   FROM customers
+                   """)
+    customers = cursor.fetchall()
+
+    cursor.execute("""
+                   SELECT vehicle_id, make, model
+                   FROM vehicle
+                   """)
+    vehicles = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+
+    return render_template(
+        "edit_sale.html",
+        sale=sale,
+        customers=customers,
+        vehicles=vehicles
+    )
+
+@app.route('/update_sale/<int:sale_id>', methods=['POST'])
+def update_sale(sale_id):
+    customer_id = request.form['customer_id']
+    vehicle_id = request.form['vehicle_id']
+    sale_date = request.form['sale_date']
+    amount = request.form['amount']
+    payment_method = request.form['payment_method']
+    sale_status = request.form['sale_status']
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        UPDATE sales
+        SET
+            customer_id=%s,
+            vehicle_id=%s,
+            sale_date=%s,
+            amount=%s,
+            payment_method=%s,
+            sale_status=%s
+        WHERE sale_id=%s
+    """, (
+        customer_id,
+        vehicle_id,
+        sale_date,
+        amount,
+        payment_method,
+        sale_status,
+        sale_id
+    ))
+
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+
+    return redirect(url_for('sales'))    
 #Function for calculating the total vehicles, sales, customers and getting the revenue
 def calculate_totals():
     conn = get_db_connection()
