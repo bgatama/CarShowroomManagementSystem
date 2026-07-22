@@ -124,10 +124,18 @@
 
                         All Customers
                     </h2>
-                    <input
-                    type="text"
-                    class="search-box"
-                    placeholder="Search Customer...">
+                    <form method="GET" action="{{ url_for('customers') }}">
+                        <input
+                            type="text"
+                            name="search"
+                            class="search-box"
+                            placeholder="Search Customer..."
+                            value="{{ search if search else '' }}">
+
+                        <button type="submit" class="search-btn">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </button>
+                    </form>
                 </div>
 
                 <table id="customer-table">
@@ -142,12 +150,14 @@
                         <th>Customer Type</th>
                     </tr>
                     {% for customer in customers %}
-                    <tr>
+                    <tr class="customer-row">
                         <td>
                             <a href="/edit_customer/{{ customer[0] }}" class="edit-btn">
                                 <i class="fa-solid fa-pen"></i>
                             </a>
-                            <a href="/delete_customer/{{ customer[0] }}" class="delete-btn">
+                            <a href="{{ url_for('delete_customer', customer_id=customer[0]) }}" 
+                            class="delete-btn"
+                            onclick="return confirm('Delete this customer?')">
                                 <i class="fa-solid fa-trash"></i>
                             </a>
 

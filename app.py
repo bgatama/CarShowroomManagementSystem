@@ -53,19 +53,40 @@ def reports():
 
 @app.route('/vehicles')
 def vehicles():
+    search = request.args.get('search', '')
+
     conn = get_db_connection()
     cursor = conn.cursor()
 
-    cursor.execute("SELECT * from `vehicle`" )
+    if search:
+        cursor.execute("""
+            SELECT *
+            FROM vehicle
+            WHERE make LIKE %s
+               OR model LIKE %s
+               OR vehicle_vin_number LIKE %s
+               OR vehicle_status LIKE %s
+               OR year LIKE %s
+        """, (
+            f"%{search}%",
+            f"%{search}%",
+            f"%{search}%",
+            f"%{search}%",
+            f"%{search}%"
+        ))
+    else:
+        cursor.execute("SELECT * FROM vehicle")
 
     vehicles = cursor.fetchall()
 
     cursor.close()
     conn.close()
 
-    return render_template("vehicles.html",
-                           vehicles=vehicles
-                           )
+    return render_template(
+        "vehicles.html",
+        vehicles=vehicles,
+        search=search
+    )
 
 @app.route('/add_vehicle', methods=['POST'])
 def add_vehicle():
@@ -104,20 +125,64 @@ INSERT INTO vehicle (make, model, year, vehicle_vin_number, price, vehicle_statu
 
     return redirect(url_for('vehicles'))
 
-@app.route('/customers')
-def customers():
+@app.route('/delete_vehicle/<int:vehicle_id>')
+def delete_vehicle(vehicle_id):
     conn = get_db_connection()
     cursor = conn.cursor()
 
-    cursor.execute("SELECT * from customers")
+    cursor.execute("""
+                   DELETE FROM vehicle
+                   WHERE vehicle_id = %s
+                   """, (vehicle_id,))
+    conn.commit()
+    
+    cursor.close()
+    conn.close()
+
+    return redirect(url_for('vehicles'))
+
+@app.route('/customers')
+def customers():
+
+    search = request.args.get("search", "")
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    if search:
+        cursor.execute("""
+            SELECT *
+            FROM customers
+            WHERE
+                customer_id LIKE %s OR
+                national_id LIKE %s OR
+                first_name LIKE %s OR
+                last_name LIKE %s OR
+                phone_number LIKE %s OR
+                email LIKE %s OR
+                customer_type LIKE %s
+        """, (
+            f"%{search}%",
+            f"%{search}%",
+            f"%{search}%",
+            f"%{search}%",
+            f"%{search}%",
+            f"%{search}%",
+            f"%{search}%"
+        ))
+    else:
+        cursor.execute("SELECT * FROM customers")
 
     customers = cursor.fetchall()
 
     cursor.close()
     conn.close()
 
-    return render_template("customers.html",
-                           customers=customers)
+    return render_template(
+        "customers.html",
+        customers=customers,
+        search=search
+    )
 
 @app.route('/add_customer', methods=['POST'])
 def add_customer():
@@ -153,9 +218,27 @@ def add_customer():
 
     return redirect(url_for('customers'))
 
+@app.route('/delete_customer/<int:customer_id>')
+def delete_customer(customer_id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+                   DELETE FROM customers
+                   WHERE customer_id=%s
+                   """, (customer_id,))
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+
+    return redirect(url_for('customers'))
 
 @app.route('/sales')
 def sales():
+
+    search = request.args.get("search", "")
+
     conn = get_db_connection()
     cursor = conn.cursor()
 
@@ -175,24 +258,60 @@ def sales():
     vehicles = cursor.fetchall()
 
     # Sales table
-    cursor.execute("""
-        SELECT
-            sales.sale_id,
-            customers.first_name,
-            customers.last_name,
-            vehicle.make,
-            vehicle.model,
-            sales.amount,
-            sales.payment_method,
-            sales.sale_status,
-            sales.sale_date
-        FROM sales
-        JOIN customers
-            ON sales.customer_id = customers.customer_id
-        JOIN vehicle
-            ON sales.vehicle_id = vehicle.vehicle_id
-        ORDER BY sales.sale_date DESC
-    """)
+    if search:
+        cursor.execute("""
+            SELECT
+                sales.sale_id,
+                customers.first_name,
+                customers.last_name,
+                vehicle.make,
+                vehicle.model,
+                sales.amount,
+                sales.payment_method,
+                sales.sale_status,
+                sales.sale_date
+            FROM sales
+            JOIN customers
+                ON sales.customer_id = customers.customer_id
+            JOIN vehicle
+                ON sales.vehicle_id = vehicle.vehicle_id
+            WHERE
+                customers.first_name LIKE %s OR
+                customers.last_name LIKE %s OR
+                vehicle.make LIKE %s OR
+                vehicle.model LIKE %s OR
+                sales.payment_method LIKE %s OR
+                sales.sale_status LIKE %s OR
+                sales.amount LIKE %s
+            ORDER BY sales.sale_date DESC
+        """, (
+            f"%{search}%",
+            f"%{search}%",
+            f"%{search}%",
+            f"%{search}%",
+            f"%{search}%",
+            f"%{search}%",
+            f"%{search}%"
+        ))
+    else:
+        cursor.execute("""
+            SELECT
+                sales.sale_id,
+                customers.first_name,
+                customers.last_name,
+                vehicle.make,
+                vehicle.model,
+                sales.amount,
+                sales.payment_method,
+                sales.sale_status,
+                sales.sale_date
+            FROM sales
+            JOIN customers
+                ON sales.customer_id = customers.customer_id
+            JOIN vehicle
+                ON sales.vehicle_id = vehicle.vehicle_id
+            ORDER BY sales.sale_date DESC
+        """)
 
     sales = cursor.fetchall()
 
@@ -203,7 +322,8 @@ def sales():
         "sales.html",
         customers=customers,
         vehicles=vehicles,
-        sales=sales
+        sales=sales,
+        search=search
     )
 
 @app.route('/add_sale', methods=['POST'])
@@ -242,6 +362,22 @@ def add_sale():
         """, (vehicle_id,))
         conn.commit()
     
+    cursor.close()
+    conn.close()
+
+    return redirect(url_for('sales'))
+
+@app.route('/delete_sale/<int:sale_id>')
+def delete_sale(sale_id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+                   DELETE FROM sales
+                   WHERE sale_id=%s
+                   """, (sale_id,))
+    conn.commit()
+
     cursor.close()
     conn.close()
 

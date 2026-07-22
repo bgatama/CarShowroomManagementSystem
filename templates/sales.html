@@ -125,10 +125,19 @@
                         All Sales
                     </h2>
 
-                    <input
-                    type="text"
-                    class="search-box"
-                    placeholder="Search Sale...">
+                    <form method="GET" action="{{ url_for('sales') }}">
+                        <input
+                            type="text"
+                            name="search"
+                            class="search-box"
+                            placeholder="Search Sale..."
+                            value="{{ search if search else '' }}">
+                        
+                        <button type="submit" class="search-btn">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </button>
+                        
+                    </form>
                 </div>
 
                 <table id="sales-table">
@@ -151,7 +160,9 @@
                                 <i class="fa-solid fa-pen"></i>
                             </a>
 
-                            <a href="/delete_sale/{{ sale[0] }}" class="delete-btn">
+                            <a href="{{ url_for('delete_sale', sale_id=sale[0]) }}"
+                                class="delete-btn"
+                                onclick="return confirm('Delete this sale?')">
                                 <i class="fa-solid fa-trash"></i>
                             </a>
                         </td>
