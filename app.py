@@ -1,7 +1,7 @@
 import csv
 from io import StringIO
 from flask import Response
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session
 from flask_mysqldb import MySQL
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import letter
@@ -11,10 +11,18 @@ from io import BytesIO
 import mysql.connector
 
 app = Flask(__name__)
+app.secret_key = "car_showroom_secret_key"
 
 @app.route('/')
 def template_to_render(): #render the login page
     return render_template('login.html')
+
+@app.route("/logout")
+def logout():
+
+    session.clear()
+
+    return redirect(url_for("login"))
 
 @app.route('/login', methods=['POST'])
 def login_to_db():
@@ -33,7 +41,10 @@ def login_to_db():
     conn.close()
 
     if user:
-        return calculate_totals()
+        session["user_id"] = user[0]
+        session["username"] = user[1]
+
+        return redirect(url_for("dashboard"))
     else:
         return render_template('login.html', error="Invalid username or password")
 
@@ -49,6 +60,8 @@ def get_db_connection():
 #Various routes for different pages
 @app.route('/dashboard')
 def dashboard():
+    if "user_id" not in session:
+        return redirect(url_for("login"))
     return calculate_totals()
 
 @app.route('/login')
@@ -57,6 +70,8 @@ def login():
 
 @app.route('/vehicles')
 def vehicles():
+    if "user_id" not in session:
+        return redirect(url_for("login"))
     search = request.args.get('search', '')
 
     conn = get_db_connection()
@@ -209,6 +224,8 @@ def update_vehicle(vehicle_id):
 
 @app.route('/customers')
 def customers():
+    if "user_id" not in session:
+        return redirect(url_for("login"))
 
     search = request.args.get("search", "")
 
@@ -365,6 +382,8 @@ def update_customer(customer_id):
 
 @app.route('/sales')
 def sales():
+    if "user_id" not in session:
+        return redirect(url_for("login"))
 
     search = request.args.get("search", "")
 
@@ -587,6 +606,9 @@ def update_sale(sale_id):
 
 @app.route('/reports')
 def reports():
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+    
     conn =  get_db_connection()
     cursor = conn.cursor()
 

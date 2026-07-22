@@ -73,6 +73,33 @@ body {
 
 }
 
+/* Logout page */
+.logout-btn{
+    display:flex;
+    align-items:center;
+    gap:10px;
+
+    margin:25px 20px;
+
+    padding:12px;
+
+    text-decoration:none;
+
+    background:#dc3545;
+
+    color:#fff;
+
+    border-radius:8px;
+
+    font-weight:600;
+
+    transition:.3s;
+}
+
+.logout-btn:hover{
+    background:#bb2d3b;
+}
+
 /* Sidebar */
 .sidebar{
     margin: 0;
