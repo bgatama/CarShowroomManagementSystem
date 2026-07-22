@@ -1,5 +1,13 @@
+import csv
+from io import StringIO
+from flask import Response
 from flask import Flask, render_template, request, redirect, url_for
 from flask_mysqldb import MySQL
+from reportlab.lib import colors
+from reportlab.lib.pagesizes import letter
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
+from reportlab.pdfbase import pdfmetrics
+from io import BytesIO
 import mysql.connector
 
 app = Flask(__name__)
@@ -46,10 +54,6 @@ def dashboard():
 @app.route('/login')
 def login():
     return render_template("login.html")
-
-@app.route('/reports')
-def reports():
-    return render_template("reports.html")
 
 @app.route('/vehicles')
 def vehicles():
@@ -579,7 +583,254 @@ def update_sale(sale_id):
     cursor.close()
     conn.close()
 
-    return redirect(url_for('sales'))    
+    return redirect(url_for('sales'))
+
+@app.route('/reports')
+def reports():
+    conn =  get_db_connection()
+    cursor = conn.cursor()
+
+    start_date = request.args.get("start_date")
+    end_date = request.args.get("end_date")
+
+    cursor.execute("SELECT * FROM vehicle")
+    vehicles = cursor.fetchall()
+
+    cursor.execute("SELECT * FROM customers")
+    customers = cursor.fetchall()
+
+    if start_date and end_date:
+        cursor.execute("""
+            SELECT
+                sales.sale_id,
+                customers.first_name,
+                customers.last_name,
+                vehicle.make,
+                vehicle.model,
+                sales.amount,
+                sales.payment_method,
+                sales.sale_status,
+                sales.sale_date
+            FROM sales
+            JOIN customers
+                ON sales.customer_id = customers.customer_id
+            JOIN vehicle
+                ON sales.vehicle_id = vehicle.vehicle_id
+            WHERE sales.sale_date BETWEEN %s AND %s
+            ORDER BY sales.sale_date DESC
+        """, (start_date, end_date))
+
+    else:
+        cursor.execute("""
+            SELECT
+                sales.sale_id,
+                customers.first_name,
+                customers.last_name,
+                vehicle.make,
+                vehicle.model,
+                sales.amount,
+                sales.payment_method,
+                sales.sale_status,
+                sales.sale_date
+            FROM sales
+            JOIN customers
+                ON sales.customer_id = customers.customer_id
+            JOIN vehicle
+                ON sales.vehicle_id = vehicle.vehicle_id
+            ORDER BY sales.sale_date DESC
+        """)
+    sales= cursor.fetchall()
+
+    cursor.execute("SELECT COUNT(*) FROM vehicle")
+    total_vehicles = cursor.fetchone()[0]
+
+    cursor.execute("SELECT COUNT(*) FROM customers")
+    total_customers = cursor.fetchone()[0]
+
+    if start_date and end_date:
+        cursor.execute("""
+            SELECT COUNT(*)
+            FROM sales
+            WHERE sale_date BETWEEN %s AND %s
+        """, (start_date, end_date))
+    else:
+        cursor.execute("SELECT COUNT(*) FROM sales")
+
+    total_sales = cursor.fetchone()[0]
+
+    if start_date and end_date:
+        cursor.execute("""
+            SELECT SUM(amount)
+            FROM sales
+            WHERE sale_date BETWEEN %s AND %s
+        """, (start_date, end_date))
+    else:
+        cursor.execute("SELECT SUM(amount) FROM sales")
+    total_revenue = cursor.fetchone()[0] or 0
+
+    cursor.close()
+    conn.close()
+    
+    return render_template(
+        "reports.html",
+        vehicles=vehicles,
+        customers=customers,
+        sales=sales,
+        total_vehicles=total_vehicles,
+        total_customers=total_customers,
+        total_sales=total_sales,
+        total_revenue=total_revenue,
+        start_date=start_date,
+        end_date=end_date   
+     )
+
+
+@app.route('/export_csv')
+def export_csv():
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT
+            sales.sale_id,
+            customers.first_name,
+            customers.last_name,
+            vehicle.make,
+            vehicle.model,
+            sales.amount,
+            sales.payment_method,
+            sales.sale_status,
+            sales.sale_date
+        FROM sales
+        JOIN customers
+            ON sales.customer_id = customers.customer_id
+        JOIN vehicle
+            ON sales.vehicle_id = vehicle.vehicle_id
+        ORDER BY sales.sale_date DESC
+    """)
+
+    sales = cursor.fetchall()
+
+    output = StringIO()
+    writer = csv.writer(output)
+
+    writer.writerow([
+        "Sale ID",
+        "Customer",
+        "Vehicle",
+        "Amount",
+        "Payment Method",
+        "Status",
+        "Sale Date"
+    ])
+
+    for sale in sales:
+        writer.writerow([
+            sale[0],
+            f"{sale[1]} {sale[2]}",
+            f"{sale[3]} {sale[4]}",
+            sale[5],
+            sale[6],
+            sale[7],
+            sale[8]
+        ])
+
+    cursor.close()
+    conn.close()
+
+    output.seek(0)
+
+    return Response(
+        output,
+        mimetype="text/csv",
+        headers={
+            "Content-Disposition":
+            "attachment; filename=sales_report.csv"
+        }
+    )
+
+
+@app.route('/export_pdf')
+def export_pdf():
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT
+            sales.sale_id,
+            customers.first_name,
+            customers.last_name,
+            vehicle.make,
+            vehicle.model,
+            sales.amount,
+            sales.payment_method,
+            sales.sale_status,
+            sales.sale_date
+        FROM sales
+        JOIN customers
+            ON sales.customer_id = customers.customer_id
+        JOIN vehicle
+            ON sales.vehicle_id = vehicle.vehicle_id
+        ORDER BY sales.sale_date DESC
+    """)
+
+    sales = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+
+    buffer = BytesIO()
+
+    pdf = SimpleDocTemplate(buffer, pagesize=letter)
+
+    data = [[
+        "Sale ID",
+        "Customer",
+        "Vehicle",
+        "Amount",
+        "Payment",
+        "Status",
+        "Date"
+    ]]
+
+    for sale in sales:
+        data.append([
+            sale[0],
+            f"{sale[1]} {sale[2]}",
+            f"{sale[3]} {sale[4]}",
+            f"KSh {sale[5]:,.2f}",
+            sale[6],
+            sale[7],
+            str(sale[8])
+        ])
+
+    table = Table(data)
+
+    table.setStyle(TableStyle([
+        ("BACKGROUND",(0,0),(-1,0),colors.darkblue),
+        ("TEXTCOLOR",(0,0),(-1,0),colors.white),
+        ("GRID",(0,0),(-1,-1),1,colors.black),
+        ("BACKGROUND",(0,1),(-1,-1),colors.beige),
+        ("ALIGN",(0,0),(-1,-1),"CENTER"),
+        ("FONTNAME",(0,0),(-1,0),"Helvetica-Bold"),
+        ("BOTTOMPADDING",(0,0),(-1,0),10)
+    ]))
+
+    pdf.build([table])
+
+    buffer.seek(0)
+
+    return Response(
+        buffer,
+        mimetype="application/pdf",
+        headers={
+            "Content-Disposition":
+            "attachment; filename=sales_report.pdf"
+        }
+    )
+
 #Function for calculating the total vehicles, sales, customers and getting the revenue
 def calculate_totals():
     conn = get_db_connection()

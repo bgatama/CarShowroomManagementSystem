@@ -1,33 +1,166 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>Reports</title>
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap" rel="stylesheet">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Reports</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap" rel="stylesheet">
     <link rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-    </head>
-    <body>
-        <input type="checkbox" id="close">
-        <label for="close" class="btn-show-nav">
-            <i class="fas fa-bars"></i>
-        </label>
-         <nav>
-            <a href="{{ url_for('dashboard') }}" class="nav-brand">Car Showroom Management System</a>
-            <h2>Menu</h2>
-            <ul>
-                <li><a href="{{ url_for('dashboard') }}"><i class="fas fa-home"></i>Dashboard</a></li>
-                <li><a href="{{ url_for('vehicles') }}"><i class="fas fa-car"></i>Vehicles</a></li>
-                <li><a href="{{ url_for('customers') }}"><i class="fas fa-users"></i>Customers</a></li>
-                <li><a href="{{ url_for('sales') }}"><i class="fas fa-cart-shopping"></i>Sales</a></li>
-                <li><a href="{{ url_for('reports') }}"><i class="fas fa-chart-column"></i>Reports</a></li>
-            </ul>
-        </nav>
-        <div class="content">   
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+</head>
+
+<body>
+    <input type="checkbox" id="close">
+
+    <label for="close" class="btn-show-nav">
+        <i class="fas fa-bars"></i>
+    </label>
+
+    <nav>
+        <a href="{{ url_for('dashboard') }}" class="nav-brand">
+            Car Showroom Management System
+        </a>
+
+        <h2>Menu</h2>
+        <ul>
+            <li><a href="{{ url_for('dashboard') }}"><i class="fas fa-home"></i>Dashboard</a></li>
+            <li><a href="{{ url_for('vehicles') }}"><i class="fas fa-car"></i>Vehicles</a></li>
+            <li><a href="{{ url_for('customers') }}"><i class="fas fa-users"></i>Customers</a></li>
+            <li><a href="{{ url_for('sales') }}"><i class="fas fa-cart-shopping"></i>Sales</a></li>
+            <li><a href="{{ url_for('reports') }}"><i class="fas fa-chart-column"></i>Reports</a></li>
+        </ul>
+
+    </nav>
+    <div class="content">
+        <div id="report-content">
             <h1>Reports</h1>
-            <p>View details about your reports here.</p>
+            <p>View and analyze showroom information.</p>
+
+            <div class="report-filter">
+                <form method="GET" action="{{ url_for('reports') }}">
+                    <label>From</label>
+                    <input type="date" name="start_date" value="{{start_date }}">
+
+                    <label>To</label>
+                    <input type="date" name="end_date" value="{{ end_date }}">
+
+                    <button type="submit" class="btn-primary">
+                        <i class="fas fa-filter"></i>Generate Report
+                    </button>
+
+                    </form>
+            
+            
+            
+            </div>
+
+            <div class="report-toolbar">
+                <a href="{{ url_for('export_csv') }}" class="export-btn">
+                    <i class="fas fa-file-csv"></i>
+                    Export CSV
+                </a>
+
+                <a href="{{ url_for('export_pdf') }}" class="pdf-btn">
+                    <i class="fas fa-file-pdf"></i>
+                    Export PDF
+                </a>
+            </div>
+
+            <div class="report-cards">
+
+                <div class="report-card">
+                    <h3>Total Vehicles</h3>
+                    <p>{{ total_vehicles }}</p>
+                </div>
+
+                <div class="report-card">
+                    <h3>Total Customers</h3>
+                    <p>{{ total_customers }}</p>
+                </div>
+
+                <div class="report-card">
+                    <h3>Total Sales</h3>
+                    <p>{{ total_sales }}</p>
+                </div>
+
+                <div class="report-card">
+                    <h3>Total Revenue</h3>
+                    <p>KSh {{ "{:,.2f}".format(total_revenue) }}</p>
+                </div>
+            </div>
+
+            <hr>
+            <h2>Vehicle Report</h2>
+            <table id="vehicle-table">
+                <tr>
+                    <th>ID</th>
+                    <th>Make</th>
+                    <th>Model</th>
+                    <th>Year</th>
+                    <th>Status</th>
+                </tr>
+                {% for vehicle in vehicles %}
+                <tr>
+                    <td>{{ vehicle[0] }}</td>
+                    <td>{{ vehicle[1] }}</td>
+                    <td>{{ vehicle[2] }}</td>
+                    <td>{{ vehicle[3] }}</td>
+                    <td>{{ vehicle[6] }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+
+            <br><br>
+
+            <h2>Customer Report</h2>
+            <table id="customer-table">
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>Email</th>
+                    <th>Customer Type</th>
+                </tr>
+                {% for customer in customers %}
+                <tr>
+                    <td>{{ customer[0] }}</td>
+                    <td>{{ customer[2] }} {{ customer[3] }}</td>
+                    <td>{{ customer[4] }}</td>
+                    <td>{{ customer[5] }}</td>
+                    <td>{{ customer[7] }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+            <br><br>
+            <h2>Sales Report</h2>
+
+            <table id="sales-table">
+                <tr>
+                    <th>Sale ID</th>
+                    <th>Customer</th>
+                    <th>Vehicle</th>
+                    <th>Amount</th>
+                    <th>Payment</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                </tr>
+                {% for sale in sales %}
+                <tr>
+                    <td>{{ sale[0] }}</td>
+                    <td>{{ sale[1] }} {{ sale[2] }}</td>
+                    <td>{{ sale[3] }} {{ sale[4] }}</td>
+                    <td>KSh {{ "{:,.2f}".format(sale[5]) }}</td>
+                    <td>{{ sale[6] }}</td>
+                    <td>{{ sale[7] }}</td>
+                    <td>{{ sale[8] }}</td>
+                </tr>
+                {% endfor %}
+            </table>
         </div>
-    </body>
+    </div>
+
+</body>
 </html>
